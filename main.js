@@ -61,7 +61,7 @@ backToTop.style.cssText = `
   position: fixed;
   bottom: 40px;
   right: 40px;
-  background: #474af0;
+  background: #4f46e5;
   color: white;
   width: 50px;
   height: 50px;
@@ -142,6 +142,53 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     loadingScreen.style.opacity = '0';
     setTimeout(() => loadingScreen.style.display='none', 500);
-    mainPage.classList.add("visible");
+    if(mainPage) mainPage.classList.add("visible");
   }, 4000);
+});
+
+// Add Theme Toggle Logic
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+
+// Check local storage
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark-mode');
+  if(themeIcon) {
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+    themeIcon.style.color = '#fbbf24'; // Yellow sun
+  }
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    
+    if (document.body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+      themeIcon.classList.remove('fa-moon');
+      themeIcon.classList.add('fa-sun');
+      themeIcon.style.color = '#fbbf24'; 
+    } else {
+      localStorage.setItem('theme', 'light');
+      themeIcon.classList.remove('fa-sun');
+      themeIcon.classList.add('fa-moon');
+      themeIcon.style.color = '#4f46e5'; 
+    }
+  });
+}
+
+// Add Interactive Background Logic (Mouse Parallax)
+document.addEventListener('mousemove', (e) => {
+  const orbs = document.querySelectorAll('.orb');
+  const x = e.clientX / window.innerWidth;
+  const y = e.clientY / window.innerHeight;
+
+  orbs.forEach((orb, index) => {
+    const speed = (index + 1) * 30; 
+    const moveX = (x * speed) - (speed / 2);
+    const moveY = (y * speed) - (speed / 2);
+    
+    orb.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  });
 });
